@@ -1,0 +1,49 @@
+{
+  "name": "CMPA Hub — ระบบจัดการบุคลากรและปฏิบัติการ",
+  "short_name": "CMPA Hub",
+  "description": "ระบบจัดการบุคลากรและปฏิบัติการของสมาคมสร้างเสริมอาชีพคนพิการภาคตะวันออก",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1e7867",
+  "background_color": "#f7f5ef",
+  "lang": "th-TH",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "ตั้งค่า",
+      "short_name": "ตั้งค่า",
+      "url": "/settings",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "การแจ้งเตือน",
+      "short_name": "แจ้งเตือน",
+      "url": "/notifications",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

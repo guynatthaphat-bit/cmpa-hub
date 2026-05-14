@@ -1,0 +1,73 @@
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: cmpa-hub-app:latest
+    container_name: cmpa-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-4-6}
+      PAPERCLIP_URL: ${PAPERCLIP_URL:-}
+      PAPERCLIP_ENABLED: ${PAPERCLIP_ENABLED:-false}
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN:-}
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET:-}
+      STORAGE_PATH: /var/cmpa/storage
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-25}
+      FIELD_ENCRYPTION_KEY: ${FIELD_ENCRYPTION_KEY}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      NODE_ENV: production
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD}
+      ADMIN_FIRST_NAME: ${ADMIN_FIRST_NAME}
+      ADMIN_LAST_NAME: ${ADMIN_LAST_NAME}
+    volumes:
+      - /var/cmpa/storage:/var/cmpa/storage
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    networks:
+      - cmpa
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: cmpa-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /var/cmpa/letsencrypt:/etc/letsencrypt:ro
+      - /var/cmpa/certbot-webroot:/var/www/certbot:ro
+      - /var/cmpa/storage:/var/cmpa/storage:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - cmpa
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: cmpa-certbot
+    restart: unless-stopped
+    volumes:
+      - /var/cmpa/letsencrypt:/etc/letsencrypt
+      - /var/cmpa/certbot-webroot:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done;'"
+    networks:
+      - cmpa
+
+networks:
+  cmpa:
+    driver: bridge
+    name: cmpa-network

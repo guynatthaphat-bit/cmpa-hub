@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+ * CMPA Hub design tokens
+ *
+ * Brand direction: refined, warm, trustworthy. A teal/jade primary echoing Thai
+ * temple greens, with a warm amber accent. Soft surfaces, generous whitespace,
+ * minimal but considered motion.
+ * ============================================================================= */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 36 30% 98%;
+    --foreground: 200 20% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 200 20% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 20% 14%;
+
+    /* Brand — jade teal */
+    --primary: 168 52% 30%;
+    --primary-foreground: 36 30% 98%;
+
+    /* Soft secondary surface */
+    --secondary: 168 20% 94%;
+    --secondary-foreground: 200 20% 14%;
+
+    /* Warm amber accent */
+    --accent: 38 88% 56%;
+    --accent-foreground: 30 50% 12%;
+
+    /* Muted text + dividers */
+    --muted: 36 14% 92%;
+    --muted-foreground: 200 8% 42%;
+
+    /* Feedback */
+    --destructive: 358 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 55% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 92% 50%;
+    --warning-foreground: 30 60% 12%;
+
+    /* Borders + focus rings */
+    --border: 200 14% 88%;
+    --input: 200 14% 88%;
+    --ring: 168 52% 30%;
+
+    --radius: 0.75rem;
+
+    /* Typography */
+    --font-sans: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    --font-thai: 'Noto Sans Thai', 'Inter', system-ui, sans-serif;
+    --font-display: 'Noto Serif Thai', 'Inter', serif;
+  }
+
+  .dark {
+    --background: 200 25% 9%;
+    --foreground: 36 18% 92%;
+    --card: 200 22% 13%;
+    --card-foreground: 36 18% 92%;
+    --popover: 200 22% 13%;
+    --popover-foreground: 36 18% 92%;
+    --primary: 168 48% 52%;
+    --primary-foreground: 200 25% 9%;
+    --secondary: 200 18% 18%;
+    --secondary-foreground: 36 18% 92%;
+    --accent: 38 88% 60%;
+    --accent-foreground: 30 50% 12%;
+    --muted: 200 18% 18%;
+    --muted-foreground: 200 8% 64%;
+    --destructive: 358 65% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 50% 50%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 88% 58%;
+    --warning-foreground: 30 60% 12%;
+    --border: 200 18% 22%;
+    --input: 200 18% 22%;
+    --ring: 168 48% 52%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Thai text gets a touch more line-height for readability */
+  :lang(th) {
+    line-height: 1.65;
+    font-family: var(--font-thai);
+  }
+
+  /* Avoid iOS zoom on input focus */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Disable browser default for tap-feedback elements */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply relative overflow-hidden bg-muted;
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+
+  /* Safe-area aware bottom nav padding */
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0) + 0.5rem);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  /* Cards with subtle gradient surface */
+  .surface-card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_20px_-12px_rgba(15,23,42,0.08)];
+  }
+
+  /* Focus ring matching brand */
+  .focus-ring {
+    @apply outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar visually, keep functionality */
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Tabular figures for numeric columns */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

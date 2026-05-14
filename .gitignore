@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+dist/
+
+# misc
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# storage & backups (large binary)
+storage/
+backups/
+nginx/ssl/
+certbot-webroot/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# coverage
+coverage/
+.nyc_output/
+
+# OS
+Thumbs.db
+
+# Claude Code local settings (contains machine-specific paths)
+.claude/settings.local.json
+
+# Temp extraction folders
+extracted-zip/

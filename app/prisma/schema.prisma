@@ -1,0 +1,554 @@
+// =============================================================================
+// CMPA Hub — Database schema (PostgreSQL 16 + pgcrypto for field encryption)
+// All 7 modules defined up-front so we never need a destructive migration.
+// =============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  // binaryTargets — รองรับทั้ง local dev + Render Docker (Alpine Linux)
+  // - native: macOS/Linux/Windows dev machine
+  // - linux-musl-openssl-3.0.x: Alpine Linux (Docker image node:20-alpine)
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto]
+}
+
+// ============================================================================
+// AUTH & USERS
+// ============================================================================
+
+enum Role {
+  ADMIN
+  MANAGER
+  STAFF
+  VOLUNTEER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING_DELETION // soft-delete during 30-day PDPA grace period
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerifiedAt DateTime?
+  passwordHash    String?
+
+  // Force password change on first login
+  mustChangePassword Boolean @default(false)
+
+  employeeCode String? @unique
+  firstName    String
+  lastName     String
+  nickname     String?
+  phone        String?
+  lineUserId   String? @unique
+  avatarUrl    String?
+
+  role   Role       @default(STAFF)
+  status UserStatus @default(ACTIVE)
+
+  // Preferences
+  locale     String @default("th-TH")
+  timezone   String @default("Asia/Bangkok")
+  dateSystem String @default("BE") // "BE" (พ.ศ.) or "CE" (ค.ศ.)
+  theme      String @default("system") // "light" | "dark" | "system"
+
+  // PDPA
+  consentedAt         DateTime?
+  deletionRequestedAt DateTime?
+  deletionScheduledAt DateTime?
+
+  // Audit
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+  lastLoginIp String?
+
+  // ---- Relations ----
+  attendances      Attendance[]
+  leaveRequests    LeaveRequest[]   @relation("Requester")
+  approvedLeaves   LeaveRequest[]   @relation("LeaveApprover")
+  leaveBalances    LeaveBalance[]
+  projectsOwned    Project[]        @relation("ProjectOwner")
+  projectMembers   ProjectMember[]
+  tasks            Task[]           @relation("TaskAssignee")
+  kpis             KPI[]
+  documents        Document[]
+  expenseClaims    ExpenseClaim[]   @relation("ExpenseClaimant")
+  approvedExpenses ExpenseClaim[]   @relation("ExpenseApprover")
+  aiConversations  AIConversation[]
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  sessions         Session[]
+  accounts         Account[]
+
+  @@index([status])
+  @@index([role])
+}
+
+// Auth.js v5 (Prisma adapter) — Account/Session
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  userAgent    String?
+  ipAddress    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expires])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================================================
+// ATTENDANCE
+// ============================================================================
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  EARLY_LEAVE
+  ABSENT
+  REMOTE
+  ON_LEAVE
+}
+
+model Attendance {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date           DateTime  @db.Date
+  clockInAt      DateTime?
+  clockInLat     Float?
+  clockInLng     Float?
+  clockInSelfie  String?
+  clockOutAt     DateTime?
+  clockOutLat    Float?
+  clockOutLng    Float?
+  clockOutSelfie String?
+
+  status AttendanceStatus @default(PRESENT)
+  note   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([date])
+  @@index([userId, date])
+}
+
+// ============================================================================
+// LEAVE
+// ============================================================================
+
+enum LeaveType {
+  ANNUAL // ลาพักร้อน
+  SICK // ลาป่วย
+  PERSONAL // ลากิจ
+  MATERNITY // ลาคลอด
+  ORDINATION // ลาบวช
+  BEREAVEMENT // ลาเนื่องจากบุคคลในครอบครัวเสียชีวิต
+  OTHER
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model LeaveRequest {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation("Requester", fields: [userId], references: [id])
+
+  leaveType     LeaveType
+  startDate     DateTime  @db.Date
+  endDate       DateTime  @db.Date
+  daysCount     Float // supports 0.5 for half-day
+  reason        String    @db.Text
+  attachmentUrl String?
+
+  status          LeaveStatus @default(PENDING)
+  approverId      String?
+  approver        User?       @relation("LeaveApprover", fields: [approverId], references: [id])
+  approvedAt      DateTime?
+  rejectionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([approverId, status])
+  @@index([startDate, endDate])
+}
+
+model LeaveBalance {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  year   Int
+
+  annualTotal   Float @default(6)
+  annualUsed    Float @default(0)
+  sickTotal     Float @default(30)
+  sickUsed      Float @default(0)
+  personalTotal Float @default(3)
+  personalUsed  Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, year])
+}
+
+// ============================================================================
+// PROJECTS & TASKS
+// ============================================================================
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  code        String        @unique
+  name        String
+  description String?       @db.Text
+  status      ProjectStatus @default(PLANNING)
+
+  startDate DateTime? @db.Date
+  endDate   DateTime? @db.Date
+  budget    Decimal?  @db.Decimal(15, 2)
+
+  ownerId String
+  owner   User   @relation("ProjectOwner", fields: [ownerId], references: [id])
+
+  members ProjectMember[]
+  tasks   Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([ownerId])
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  role      String   @default("member")
+  joinedAt  DateTime @default(now())
+
+  @@unique([projectId, userId])
+  @@index([userId])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Task {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String? @db.Text
+
+  status   TaskStatus   @default(TODO)
+  priority TaskPriority @default(MEDIUM)
+
+  assigneeId String?
+  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+
+  dueDate     DateTime?
+  completedAt DateTime?
+  position    Int       @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, status])
+  @@index([assigneeId, status])
+}
+
+// ============================================================================
+// KPI
+// ============================================================================
+
+enum KPIPeriod {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+model KPI {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String? @db.Text
+  unit        String
+  target      Float
+  current     Float   @default(0)
+  weight      Float   @default(1)
+
+  period      KPIPeriod
+  periodLabel String // e.g. "2569-Q1", "2569-05", "2569"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, periodLabel])
+}
+
+// ============================================================================
+// DOCUMENTS
+// ============================================================================
+
+enum DocumentCategory {
+  CONTRACT
+  ID_CARD
+  CERTIFICATE
+  REPORT
+  POLICY
+  OTHER
+}
+
+model Document {
+  id      String @id @default(cuid())
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  name        String
+  category    DocumentCategory @default(OTHER)
+  description String?          @db.Text
+
+  fileUrl  String
+  fileSize Int
+  mimeType String
+
+  isEncrypted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([category])
+}
+
+// ============================================================================
+// EXPENSES
+// ============================================================================
+
+enum ExpenseCategory {
+  TRAVEL
+  MEAL
+  OFFICE_SUPPLY
+  EVENT
+  OVERTIME
+  OTHER
+}
+
+enum ExpenseStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  PAID
+}
+
+model ExpenseClaim {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation("ExpenseClaimant", fields: [userId], references: [id])
+
+  category    ExpenseCategory
+  amount      Decimal         @db.Decimal(12, 2)
+  description String          @db.Text
+  receiptUrl  String?
+
+  // OCR-extracted (Claude vision) — human must confirm before submit
+  ocrVendor     String?
+  ocrDate       DateTime? @db.Date
+  ocrAmount     Decimal?  @db.Decimal(12, 2)
+  ocrConfidence Float?
+
+  status     ExpenseStatus @default(DRAFT)
+  approverId String?
+  approver   User?         @relation("ExpenseApprover", fields: [approverId], references: [id])
+  approvedAt DateTime?
+  paidAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([approverId, status])
+}
+
+// ============================================================================
+// AI RESEARCH
+// ============================================================================
+
+model AIConversation {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title  String
+
+  messages AIMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, updatedAt])
+}
+
+model AIMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  conversation   AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  role       String // "user" | "assistant" | "system"
+  content    String @db.Text
+  model      String? // "paperclip-ceo" | "claude-sonnet-4-6"
+  confidence Float?
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// ============================================================================
+// NOTIFICATIONS
+// ============================================================================
+
+enum NotificationType {
+  LEAVE_REQUEST
+  LEAVE_DECISION
+  EXPENSE_DECISION
+  TASK_ASSIGNED
+  MENTION
+  SYSTEM
+}
+
+model Notification {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type    NotificationType
+  title   String
+  body    String           @db.Text
+  linkUrl String?
+
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
+
+// ============================================================================
+// AUDIT LOG (PDPA-grade)
+// ============================================================================
+
+model AuditLog {
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  action     String // "user.login", "leave.approve", "document.reveal", etc.
+  entityType String?
+  entityId   String?
+
+  before Json?
+  after  Json?
+
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+// ============================================================================
+// RATE LIMITING (DB-backed for simplicity in v1; Redis-ready in v2)
+// ============================================================================
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  key       String // e.g. "login:192.168.1.1" or "login:email:foo@bar.com"
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([key])
+  @@index([resetAt])
+}

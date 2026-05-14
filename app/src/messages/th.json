@@ -1,0 +1,242 @@
+{
+  "App": {
+    "name": "CMPA Hub",
+    "orgShort": "สอค.ภอ",
+    "orgFull": "สมาคมสร้างเสริมอาชีพคนพิการภาคตะวันออก",
+    "regNumber": "ทะเบียน จ.๓๗๙๘/๒๕๕๒",
+    "loading": "กำลังโหลด…",
+    "saving": "กำลังบันทึก…",
+    "retry": "ลองอีกครั้ง",
+    "cancel": "ยกเลิก",
+    "save": "บันทึก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "back": "ย้อนกลับ",
+    "next": "ถัดไป",
+    "confirm": "ยืนยัน",
+    "close": "ปิด",
+    "search": "ค้นหา",
+    "filter": "ตัวกรอง",
+    "all": "ทั้งหมด",
+    "comingSoon": "เร็วๆ นี้",
+    "thai": "ไทย",
+    "english": "English"
+  },
+  "Nav": {
+    "home": "หน้าหลัก",
+    "attendance": "ลงเวลา",
+    "leave": "ลางาน",
+    "projects": "โครงการ",
+    "kpi": "KPI",
+    "documents": "เอกสาร",
+    "expenses": "ค่าใช้จ่าย",
+    "ai": "AI วิจัย",
+    "notifications": "การแจ้งเตือน",
+    "settings": "ตั้งค่า",
+    "more": "เพิ่มเติม"
+  },
+  "Auth": {
+    "loginTitle": "เข้าสู่ระบบ",
+    "loginSubtitle": "ระบบจัดการบุคลากรและปฏิบัติการ",
+    "emailLabel": "อีเมล",
+    "emailPlaceholder": "you@cmpa.or.th",
+    "passwordLabel": "รหัสผ่าน",
+    "passwordPlaceholder": "อย่างน้อย 8 ตัวอักษร",
+    "submit": "เข้าสู่ระบบ",
+    "submitting": "กำลังเข้าสู่ระบบ…",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "errorInvalidCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "errorRateLimit": "ลองผิดเกิน 5 ครั้ง — กรุณารอ 15 นาที",
+    "errorSuspended": "บัญชีของคุณถูกระงับ — ติดต่อผู้ดูแลระบบ",
+    "errorPendingDeletion": "บัญชีของคุณอยู่ระหว่างคำขอลบ — ติดต่อผู้ดูแลระบบ",
+    "errorGeneric": "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง",
+    "passwordRequirements": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวอักษรและตัวเลข",
+    "mustChangePasswordTitle": "ต้องเปลี่ยนรหัสผ่านก่อน",
+    "mustChangePasswordBody": "เพื่อความปลอดภัย กรุณาตั้งรหัสผ่านใหม่ก่อนเริ่มใช้งาน",
+    "currentPassword": "รหัสผ่านปัจจุบัน",
+    "newPassword": "รหัสผ่านใหม่",
+    "confirmPassword": "ยืนยันรหัสผ่านใหม่",
+    "changePasswordSubmit": "เปลี่ยนรหัสผ่าน",
+    "passwordChangedSuccess": "เปลี่ยนรหัสผ่านสำเร็จ",
+    "logout": "ออกจากระบบ",
+    "logoutConfirm": "ออกจากระบบใช่หรือไม่?"
+  },
+  "Home": {
+    "greetingMorning": "สวัสดีตอนเช้า",
+    "greetingAfternoon": "สวัสดีตอนบ่าย",
+    "greetingEvening": "สวัสดีตอนเย็น",
+    "greetingNight": "สวัสดียามค่ำคืน",
+    "todayLabel": "วันนี้",
+    "phase1Notice": "ยินดีต้อนรับสู่ระบบ — Phase 1 พร้อมใช้งาน",
+    "phase1NoticeBody": "ตอนนี้คุณสามารถจัดการโปรไฟล์และตั้งค่าได้ ฟีเจอร์อื่นๆ จะทยอยเปิดในเฟสถัดไป",
+    "quickActionsTitle": "ดำเนินการด่วน",
+    "myStatusTitle": "สถานะของคุณ",
+    "recentActivityTitle": "กิจกรรมล่าสุด",
+    "noActivity": "ยังไม่มีกิจกรรม",
+    "noActivityHint": "เมื่อมีการลงเวลาหรือทำรายการ จะแสดงที่นี่"
+  },
+  "Attendance": {
+    "title": "ลงเวลา",
+    "description": "ลงเวลาเข้า-ออกพร้อม GPS และรูปถ่าย",
+    "features": [
+      "ลงเวลาเข้า-ออกพร้อมรูปเซลฟี่",
+      "บันทึกตำแหน่ง GPS",
+      "ทำงานออฟไลน์ — sync เมื่อกลับมาออนไลน์",
+      "ผู้จัดการดูตารางทีมรายวัน",
+      "รายงานการมาทำงานรายเดือน"
+    ]
+  },
+  "Leave": {
+    "title": "ลางาน",
+    "description": "ขอลาและอนุมัติคำขอลา 6 ประเภท",
+    "features": [
+      "ลาประจำปี ลาป่วย ลากิจ ลาคลอด ลาบวช ลาเนื่องจากบุคคลในครอบครัวเสียชีวิต",
+      "แจ้ง LINE Notify อัตโนมัติเมื่อส่งและเมื่อตัดสิน",
+      "ปฏิทินทีมรายเดือน",
+      "การ์ดยอดวันลาคงเหลือ",
+      "อนุมัติด้วย 1 แตะ"
+    ]
+  },
+  "Projects": {
+    "title": "โครงการ",
+    "description": "บอร์ดงานสไตล์ Kanban พร้อม drag-and-drop",
+    "features": [
+      "Kanban board: TODO → IN_PROGRESS → REVIEW → DONE",
+      "ลากการ์ดเปลี่ยนสถานะบนมือถือ",
+      "กำหนดผู้รับผิดชอบและกำหนดส่ง",
+      "กรองตามฉัน, ผู้รับผิดชอบ, ลำดับความสำคัญ",
+      "รองรับ 5 แทร็กฝึกอาชีพของสมาคม"
+    ]
+  },
+  "Kpi": {
+    "title": "KPI",
+    "description": "กำหนดและติดตามตัวชี้วัดส่วนบุคคล",
+    "features": [
+      "ตั้ง KPI รายเดือน รายไตรมาส รายปี",
+      "อัปเดตค่าปัจจุบันด้วยแตะเดียว",
+      "กราฟวงแหวนแสดงความคืบหน้า",
+      "เปรียบเทียบทีมด้วยกราฟแท่ง",
+      "ปิดงวด สแน็ปช็อตอัตโนมัติ"
+    ]
+  },
+  "Documents": {
+    "title": "เอกสาร",
+    "description": "อัปโหลด จัดหมวด ดูตัวอย่าง PDF ในเบราว์เซอร์",
+    "features": [
+      "อัปโหลดจากกล้องหรือไฟล์ในเครื่อง",
+      "หมวด: สัญญา, บัตรประชาชน, ใบรับรอง, รายงาน, นโยบาย",
+      "ดู PDF ในแอปโดยตรง",
+      "บัตรประชาชนและข้อมูลธนาคารเข้ารหัสใน DB",
+      "Audit log ทุกครั้งที่เปิดดูข้อมูลอ่อนไหว"
+    ]
+  },
+  "Expenses": {
+    "title": "ค่าใช้จ่าย",
+    "description": "เบิก OT และค่าใช้จ่ายพร้อม OCR ใบเสร็จ",
+    "features": [
+      "ถ่ายรูปใบเสร็จ → Claude vision สกัดข้อมูลให้",
+      "ยืนยันก่อนส่ง ไม่ submit อัตโนมัติ",
+      "หมวด: เดินทาง, อาหาร, อุปกรณ์, กิจกรรม, OT, อื่นๆ",
+      "อนุมัติด้วย 1 แตะ",
+      "สรุปรายเดือนและ export CSV"
+    ]
+  },
+  "Ai": {
+    "title": "AI วิจัย",
+    "description": "ผู้ช่วย AI ที่รู้บริบทขององค์กร",
+    "features": [
+      "ถามได้ทั้งเรื่องกฎหมาย แม่แบบ MOU แผนงาน",
+      "เชื่อมต่อกับ Paperclip CEO agent",
+      "Fallback Claude Sonnet 4.6 อัตโนมัติ",
+      "Anti-fabrication: แสดงค่าความมั่นใจทุกครั้ง",
+      "บันทึกบทสนทนาทุกรายการ"
+    ]
+  },
+  "Notifications": {
+    "title": "การแจ้งเตือน",
+    "description": "ติดตามคำขอลา การอนุมัติ และข้อความระบบ",
+    "emptyTitle": "ยังไม่มีการแจ้งเตือน",
+    "emptyBody": "เมื่อมีคำขอลา การอนุมัติ หรือข้อความระบบ จะแสดงที่นี่",
+    "features": [
+      "แจ้งเตือนคำขอลาและการอนุมัติ",
+      "แจ้งเตือนการมอบหมายงาน",
+      "การแจ้งเตือนระบบสำคัญ",
+      "Push notification (Phase 5+)",
+      "รวมศูนย์ใน Notification Center"
+    ]
+  },
+  "Settings": {
+    "title": "ตั้งค่า",
+    "profile": "โปรไฟล์",
+    "profileDescription": "ชื่อ ตำแหน่ง รูปประจำตัว",
+    "security": "ความปลอดภัย",
+    "securityDescription": "เปลี่ยนรหัสผ่าน อุปกรณ์ที่เข้าสู่ระบบ",
+    "preferences": "การแสดงผล",
+    "preferencesDescription": "ภาษา ปี พ.ศ./ค.ศ. ธีม",
+    "privacy": "ความเป็นส่วนตัว (PDPA)",
+    "privacyDescription": "Export ข้อมูล หรือขอลบบัญชี",
+    "about": "เกี่ยวกับ",
+    "aboutDescription": "เวอร์ชัน, นโยบาย, ลิขสิทธิ์",
+    "logout": "ออกจากระบบ",
+    "preferencesLanguage": "ภาษา",
+    "preferencesDateSystem": "ระบบปี",
+    "preferencesDateSystemBE": "พุทธศักราช (พ.ศ.)",
+    "preferencesDateSystemCE": "คริสต์ศักราช (ค.ศ.)",
+    "preferencesTheme": "ธีม",
+    "preferencesThemeLight": "สว่าง",
+    "preferencesThemeDark": "มืด",
+    "preferencesThemeSystem": "ตามระบบ",
+    "preferencesNotifications": "การแจ้งเตือน",
+    "preferencesPushNotifications": "Push notification",
+    "preferencesLineNotifications": "แจ้งเตือนผ่าน LINE",
+    "profileFirstName": "ชื่อ",
+    "profileLastName": "นามสกุล",
+    "profileNickname": "ชื่อเล่น",
+    "profilePhone": "โทรศัพท์",
+    "profileEmployeeCode": "รหัสบุคลากร",
+    "profileEmail": "อีเมล",
+    "profileRole": "ตำแหน่ง",
+    "profileSaved": "บันทึกโปรไฟล์แล้ว",
+    "preferencesSaved": "บันทึกการแสดงผลแล้ว",
+    "privacyConsentStatus": "สถานะการยินยอม",
+    "privacyConsented": "ยินยอมแล้ว",
+    "privacyNotConsented": "ยังไม่ได้ยินยอม",
+    "privacyDataExport": "ขอข้อมูลส่วนบุคคล",
+    "privacyDataExportBody": "ตามสิทธิ์ใน พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล คุณสามารถขอข้อมูลส่วนบุคคลทั้งหมดของคุณได้ ผู้ดูแลระบบจะส่งข้อมูลให้ภายใน 30 วัน",
+    "privacyDataExportButton": "ขอ Export ข้อมูล",
+    "privacyDataExportSubmitted": "ส่งคำขอ Export ข้อมูลแล้ว",
+    "privacyDeleteAccount": "ขอลบบัญชี",
+    "privacyDeleteAccountBody": "การลบบัญชีจะส่งคำขอให้ผู้ดูแลระบบ และมีระยะเวลา 30 วันที่คุณสามารถยกเลิกได้",
+    "privacyDeleteAccountButton": "ขอลบบัญชี",
+    "privacyDeleteAccountConfirm": "ยืนยันลบบัญชีของฉัน",
+    "privacyDeletionPending": "อยู่ระหว่างคำขอลบบัญชี",
+    "privacyDeletionScheduled": "กำหนดลบ",
+    "privacyCancelDeletion": "ยกเลิกคำขอลบ",
+    "privacyDeletionCancelled": "ยกเลิกคำขอลบแล้ว",
+    "privacyDeletionSubmitted": "ส่งคำขอลบบัญชีแล้ว",
+    "privacyAuditTrail": "บันทึกการเข้าใช้",
+    "privacyAuditTrailBody": "ทุกการเข้าสู่ระบบและการเปลี่ยนแปลงข้อมูลจะถูกบันทึก ตาม พ.ร.บ. คอมพิวเตอร์",
+    "aboutAppName": "ชื่อแอป",
+    "aboutVersion": "เวอร์ชัน",
+    "aboutOrg": "หน่วยงาน",
+    "aboutRegNumber": "เลขทะเบียน",
+    "aboutPolicies": "นโยบาย",
+    "aboutPrivacyPolicy": "นโยบายความเป็นส่วนตัว",
+    "aboutTerms": "ข้อกำหนดการใช้งาน",
+    "aboutContactSupport": "ติดต่อผู้ดูแลระบบ",
+    "aboutCopyright": "© 2569 สมาคมสร้างเสริมอาชีพคนพิการภาคตะวันออก"
+  },
+  "Roles": {
+    "ADMIN": "ผู้ดูแลระบบ",
+    "MANAGER": "ผู้จัดการ",
+    "STAFF": "เจ้าหน้าที่",
+    "VOLUNTEER": "อาสาสมัคร"
+  },
+  "Errors": {
+    "generic": "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง",
+    "network": "การเชื่อมต่อมีปัญหา ตรวจสอบอินเทอร์เน็ตของคุณ",
+    "notFound": "ไม่พบหน้าที่ค้นหา",
+    "forbidden": "คุณไม่มีสิทธิ์เข้าถึง",
+    "validation": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบและลองอีกครั้ง"
+  }
+}

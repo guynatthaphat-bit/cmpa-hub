@@ -1,0 +1,242 @@
+{
+  "App": {
+    "name": "CMPA Hub",
+    "orgShort": "CMPA",
+    "orgFull": "Eastern Disability Vocational Promotion Association",
+    "regNumber": "Reg. จ.๓๗๙๘/๒๕๕๒",
+    "loading": "Loading…",
+    "saving": "Saving…",
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "comingSoon": "Coming soon",
+    "thai": "ไทย",
+    "english": "English"
+  },
+  "Nav": {
+    "home": "Home",
+    "attendance": "Attendance",
+    "leave": "Leave",
+    "projects": "Projects",
+    "kpi": "KPI",
+    "documents": "Documents",
+    "expenses": "Expenses",
+    "ai": "AI Research",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "more": "More"
+  },
+  "Auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Staff & operations management",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@cmpa.or.th",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "At least 8 characters",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "forgotPassword": "Forgot password?",
+    "errorInvalidCredentials": "Incorrect email or password",
+    "errorRateLimit": "Too many attempts — please wait 15 minutes",
+    "errorSuspended": "Your account has been suspended — contact the admin",
+    "errorPendingDeletion": "Your account is pending deletion — contact the admin",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "passwordRequirements": "Password must be at least 8 characters and contain letters and numbers",
+    "mustChangePasswordTitle": "Change your password",
+    "mustChangePasswordBody": "For security, please set a new password before continuing",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "changePasswordSubmit": "Change password",
+    "passwordChangedSuccess": "Password changed successfully",
+    "logout": "Sign out",
+    "logoutConfirm": "Sign out?"
+  },
+  "Home": {
+    "greetingMorning": "Good morning",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "greetingNight": "Good evening",
+    "todayLabel": "Today",
+    "phase1Notice": "Welcome — Phase 1 is live",
+    "phase1NoticeBody": "You can now manage your profile and settings. Other features roll out in later phases.",
+    "quickActionsTitle": "Quick actions",
+    "myStatusTitle": "Your status",
+    "recentActivityTitle": "Recent activity",
+    "noActivity": "No activity yet",
+    "noActivityHint": "Your clock-ins and actions will show up here"
+  },
+  "Attendance": {
+    "title": "Attendance",
+    "description": "Clock in/out with GPS and selfie",
+    "features": [
+      "Clock in/out with selfie verification",
+      "GPS location capture",
+      "Offline-friendly — sync when back online",
+      "Manager view of team daily roster",
+      "Monthly attendance reports"
+    ]
+  },
+  "Leave": {
+    "title": "Leave",
+    "description": "Request and approve 6 leave types",
+    "features": [
+      "Annual, sick, personal, maternity, ordination, bereavement",
+      "Auto LINE Notify on submit and decision",
+      "Team month calendar",
+      "Leave balance card",
+      "One-tap approval"
+    ]
+  },
+  "Projects": {
+    "title": "Projects",
+    "description": "Kanban-style task board with drag-and-drop",
+    "features": [
+      "Kanban: TODO → IN_PROGRESS → REVIEW → DONE",
+      "Drag cards across columns on mobile",
+      "Assignee and due date per task",
+      "Filter by me, assignee, priority",
+      "Supports the 5 vocational training tracks"
+    ]
+  },
+  "Kpi": {
+    "title": "KPI",
+    "description": "Set and track personal performance metrics",
+    "features": [
+      "Monthly, quarterly, yearly KPIs",
+      "One-tap progress updates",
+      "Ring chart for progress",
+      "Team comparison bar chart",
+      "Auto snapshot on period close"
+    ]
+  },
+  "Documents": {
+    "title": "Documents",
+    "description": "Upload, categorize, preview PDFs in-browser",
+    "features": [
+      "Upload from camera or files",
+      "Categories: contract, ID card, certificate, report, policy",
+      "PDF preview in-app",
+      "ID cards and bank details encrypted at rest",
+      "Audit log on every sensitive-data reveal"
+    ]
+  },
+  "Expenses": {
+    "title": "Expenses",
+    "description": "OT and reimbursement claims with receipt OCR",
+    "features": [
+      "Snap receipt → Claude vision extracts vendor/date/amount",
+      "Confirm before submit — never auto-submit",
+      "Categories: travel, meal, supplies, event, OT, other",
+      "One-tap approval",
+      "Monthly summary + CSV export"
+    ]
+  },
+  "Ai": {
+    "title": "AI Research",
+    "description": "AI assistant with organization-wide context",
+    "features": [
+      "Ask about law, MOU templates, planning",
+      "Bridged to Paperclip CEO agent",
+      "Auto fallback to Claude Sonnet 4.6",
+      "Anti-fabrication: confidence shown every time",
+      "Conversations logged for review"
+    ]
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "description": "Leave requests, approvals, and system messages",
+    "emptyTitle": "No notifications yet",
+    "emptyBody": "Leave requests, approvals, and system messages will appear here.",
+    "features": [
+      "Leave request and decision alerts",
+      "Task assignment alerts",
+      "Important system messages",
+      "Push notifications (Phase 5+)",
+      "Centralized Notification Center"
+    ]
+  },
+  "Settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "profileDescription": "Name, role, avatar",
+    "security": "Security",
+    "securityDescription": "Change password, signed-in devices",
+    "preferences": "Display",
+    "preferencesDescription": "Language, BE/CE year, theme",
+    "privacy": "Privacy (PDPA)",
+    "privacyDescription": "Export your data or request deletion",
+    "about": "About",
+    "aboutDescription": "Version, policy, license",
+    "logout": "Sign out",
+    "preferencesLanguage": "Language",
+    "preferencesDateSystem": "Year system",
+    "preferencesDateSystemBE": "Buddhist Era (BE)",
+    "preferencesDateSystemCE": "Common Era (CE)",
+    "preferencesTheme": "Theme",
+    "preferencesThemeLight": "Light",
+    "preferencesThemeDark": "Dark",
+    "preferencesThemeSystem": "System",
+    "preferencesNotifications": "Notifications",
+    "preferencesPushNotifications": "Push notifications",
+    "preferencesLineNotifications": "LINE notifications",
+    "profileFirstName": "First name",
+    "profileLastName": "Last name",
+    "profileNickname": "Nickname",
+    "profilePhone": "Phone",
+    "profileEmployeeCode": "Employee code",
+    "profileEmail": "Email",
+    "profileRole": "Role",
+    "profileSaved": "Profile saved",
+    "preferencesSaved": "Preferences saved",
+    "privacyConsentStatus": "Consent status",
+    "privacyConsented": "Consented",
+    "privacyNotConsented": "Not yet consented",
+    "privacyDataExport": "Request my personal data",
+    "privacyDataExportBody": "Under PDPA you may request all your personal data. An administrator will fulfill this within 30 days.",
+    "privacyDataExportButton": "Request data export",
+    "privacyDataExportSubmitted": "Data export request submitted",
+    "privacyDeleteAccount": "Request account deletion",
+    "privacyDeleteAccountBody": "Account deletion will be queued. You have a 30-day window to cancel.",
+    "privacyDeleteAccountButton": "Request deletion",
+    "privacyDeleteAccountConfirm": "Yes, delete my account",
+    "privacyDeletionPending": "Deletion is pending",
+    "privacyDeletionScheduled": "Scheduled deletion",
+    "privacyCancelDeletion": "Cancel deletion request",
+    "privacyDeletionCancelled": "Deletion request cancelled",
+    "privacyDeletionSubmitted": "Account deletion requested",
+    "privacyAuditTrail": "Audit trail",
+    "privacyAuditTrailBody": "All logins and changes are logged in accordance with the Computer Crime Act.",
+    "aboutAppName": "App name",
+    "aboutVersion": "Version",
+    "aboutOrg": "Organization",
+    "aboutRegNumber": "Registration",
+    "aboutPolicies": "Policies",
+    "aboutPrivacyPolicy": "Privacy Policy",
+    "aboutTerms": "Terms of Use",
+    "aboutContactSupport": "Contact support",
+    "aboutCopyright": "© 2026 Career Promotion Association for People with Disabilities, Eastern Region"
+  },
+  "Roles": {
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager",
+    "STAFF": "Staff",
+    "VOLUNTEER": "Volunteer"
+  },
+  "Errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Connection issue. Check your internet.",
+    "notFound": "Page not found",
+    "forbidden": "You don't have permission to access this",
+    "validation": "Invalid data. Please review and try again."
+  }
+}
