@@ -40,5 +40,10 @@ Thumbs.db
 # Claude Code local settings (contains machine-specific paths)
 .claude/settings.local.json
 
+# App-level .env (copy of root .env for Prisma CLI)
+app/.env
+app/.env.local
+app/.env.*.local
+
 # Temp extraction folders
 extracted-zip/
