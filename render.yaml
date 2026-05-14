@@ -35,11 +35,13 @@ services:
     autoDeploy: true
 
     envVars:
-      # ---- Database (auto-injected จาก database section ด้านล่าง) ----
+      # ---- Database (Supabase — ตั้งใน Render Dashboard) ----
+      # DATABASE_URL  = Transaction pooler URL (port 6543) — สำหรับ runtime queries
+      # DIRECT_URL    = Direct connection URL (port 5432) — สำหรับ prisma db push / migrate
       - key: DATABASE_URL
-        fromDatabase:
-          name: cmpa-hub-db
-          property: connectionString
+        sync: false                    # Supabase → Settings → Database → Transaction pooler
+      - key: DIRECT_URL
+        sync: false                    # Supabase → Settings → Database → Direct connection
 
       # ---- Auth.js v5 ----
       # ใช้ทั้ง AUTH_* (v5 standard) และ NEXTAUTH_* (backward compat กับ code เดิม)
@@ -130,14 +132,10 @@ services:
   #   sizeGB: 10
 
 # =============================================================================
-# Databases
+# Databases — ใช้ Supabase (ฟรี 500MB) แทน Render DB
+# วิธีตั้ง DATABASE_URL:
+#   1. supabase.com → New project
+#   2. Settings → Database → Connection string → URI (Session mode port 5432)
+#   3. วาง URL ใน Render Dashboard → Environment → DATABASE_URL
 # =============================================================================
-databases:
-  - name: cmpa-hub-db
-    plan: basic-256mb                  # $6/mo — ต่ำสุดที่มี (Render ไม่มี free DB)
-                                       # อัปเกรดเป็น basic-1gb ($19/mo) ถ้าใช้งานหนัก
-    databaseName: cmpa_hub
-    user: cmpa_admin
-    region: singapore                  # ต้อง region เดียวกับ web service
-    postgresMajorVersion: "16"
-    ipAllowList: []                    # ปิด external access - ใช้ internal network เท่านั้น
+# (ไม่มี databases section — ใช้ external Supabase แทน)
