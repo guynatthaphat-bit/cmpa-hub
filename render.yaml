@@ -1,106 +1,59 @@
-# =============================================================================
-# CMPA Hub - Render.com Blueprint
-# =============================================================================
-# Strategy: ใช้ Docker runtime + Dockerfile เดิมที่อยู่ใน app/Dockerfile
-# เหตุผล:
-#   1. docker-entrypoint.sh จัดการ "prisma db push + seed" ครบแล้ว
-#   2. ไม่ต้องแก้โครงสร้างโปรเจกต์
-#   3. ทำงานเหมือนใน VPS ทุกอย่าง
-#
-# วิธีใช้:
-#   1. Push repo นี้ขึ้น GitHub
-#   2. Render → New + → Blueprint → เลือก repo นี้
-#   3. ตั้ง env vars ที่ sync: false (ดูด้านล่าง) ใน Dashboard
-#
-# Docs: https://render.com/docs/blueprint-spec
-# =============================================================================
-
 services:
-  # ---------------------------------------------------------------------------
-  # Web Service - Next.js 14.2 PWA (Node.js native — Free plan)
-  # ⚠️ Free plan: spins down after 15 min inactivity, cold start ~30s
-  # อัปเกรดเป็น starter ($7/mo) เพื่อ always-on + Docker runtime
-  # ---------------------------------------------------------------------------
   - type: web
     name: cmpa-hub
     runtime: node
-    region: singapore                  # ใกล้ไทย latency ~30-50ms
-    plan: free                         # $0 — ไม่รองรับ Docker, spin-down 15 min
+    plan: free
+    region: singapore
     branch: main
-    rootDir: app                       # Next.js อยู่ใน app/
-    buildCommand: npm install && npx prisma generate && npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts && npm run build
-    startCommand: npm run start
-    healthCheckPath: /api/health       # endpoint มีอยู่แล้ว
+    rootDir: app
+    buildCommand: "npm install && npx prisma generate && npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts && npm run build"
+    startCommand: "npm run start"
+    healthCheckPath: /api/health
     autoDeploy: true
 
     envVars:
-      # ---- Database (Supabase — ตั้งใน Render Dashboard) ----
-      # DATABASE_URL  = Transaction pooler URL (port 6543) — สำหรับ runtime queries
-      # DIRECT_URL    = Direct connection URL (port 5432) — สำหรับ prisma db push / migrate
       - key: DATABASE_URL
-        sync: false                    # Supabase → Settings → Database → Transaction pooler
+        sync: false
       - key: DIRECT_URL
-        sync: false                    # Supabase → Settings → Database → Direct connection
-
-      # ---- Auth.js v5 ----
-      # ใช้ทั้ง AUTH_* (v5 standard) และ NEXTAUTH_* (backward compat กับ code เดิม)
+        sync: false
       - key: NEXTAUTH_SECRET
-        generateValue: true            # Render สุ่มให้
+        generateValue: true
       - key: NEXTAUTH_URL
-        sync: false                    # ต้องตั้งหลัง deploy = https://cmpa-hub.onrender.com
+        sync: false
       - key: AUTH_TRUST_HOST
         value: "true"
-
-      # ---- Node Runtime ----
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
-
-      # ---- Initial Admin User (seed) ----
       - key: ADMIN_EMAIL
         value: natthaphat@cmpa.or.th
       - key: ADMIN_INITIAL_PASSWORD
-        sync: false                    # ตั้งใน Dashboard - ห้าม commit
+        sync: false
       - key: ADMIN_FIRST_NAME
         value: "ฐานพัฒน์"
       - key: ADMIN_LAST_NAME
         value: "สิริโชติพิพัฒ"
-
-      # ---- Anthropic API ----
       - key: ANTHROPIC_API_KEY
-        sync: false                    # ตั้งใน Dashboard
+        sync: false
       - key: ANTHROPIC_MODEL
         value: claude-sonnet-4-6
-
-      # ---- Field-level Encryption (pgcrypto) ----
       - key: FIELD_ENCRYPTION_KEY
-        generateValue: true            # 32-byte random hex - ใช้ encrypt PII ใน DB
-
-      # ---- Paperclip AI bridge (ปิดไว้ใน production) ----
+        generateValue: true
       - key: PAPERCLIP_URL
         value: ""
       - key: PAPERCLIP_ENABLED
         value: "false"
-
-      # ---- LINE Notify (Phase 3 - ปิดไว้ก่อน) ----
       - key: LINE_CHANNEL_ACCESS_TOKEN
         sync: false
       - key: LINE_CHANNEL_SECRET
         sync: false
-
-      # ---- Storage ----
-      # ⚠️ WARNING: Render filesystem เป็น EPHEMERAL!
-      # ไฟล์ที่ save ที่ STORAGE_PATH จะหายเมื่อ deploy/restart
-      # สำหรับ production บน Render ต้องเปิด R2 backup ด้านล่าง
       - key: STORAGE_PATH
         value: /var/cmpa/storage
       - key: MAX_UPLOAD_SIZE_MB
         value: "25"
-
-      # ---- Cloudflare R2 (สำหรับ persistent storage - แนะนำเปิด) ----
       - key: FEATURE_R2_BACKUP
-        value: "false"                 # เปลี่ยนเป็น "true" หลังตั้ง R2 credentials
+        value: "false"
       - key: R2_ACCOUNT_ID
         sync: false
       - key: R2_ACCESS_KEY_ID
@@ -109,32 +62,7 @@ services:
         sync: false
       - key: R2_BUCKET
         sync: false
-
-      # ---- Logging ----
       - key: LOG_LEVEL
-        value: info                    # trace | debug | info | warn | error | fatal
-
-      # ---- Feature Flags ----
+        value: info
       - key: FEATURE_PUSH_NOTIFICATIONS
         value: "false"
-
-  # ---------------------------------------------------------------------------
-  # (Optional) Disk for persistent storage
-  # ⚠️ ต้องเปลี่ยน plan เป็น standard ขึ้นไปจึงใช้ disk ได้
-  # แนะนำใช้ Cloudflare R2 (ฟรี 10GB) แทน — ดีกว่ามาก
-  # ---------------------------------------------------------------------------
-  # ถ้าจะใช้ disk: uncomment ด้านล่าง + เปลี่ยน plan เป็น standard
-  #
-  # disk:
-  #   name: cmpa-storage
-  #   mountPath: /var/cmpa/storage
-  #   sizeGB: 10
-
-# =============================================================================
-# Databases — ใช้ Supabase (ฟรี 500MB) แทน Render DB
-# วิธีตั้ง DATABASE_URL:
-#   1. supabase.com → New project
-#   2. Settings → Database → Connection string → URI (Session mode port 5432)
-#   3. วาง URL ใน Render Dashboard → Environment → DATABASE_URL
-# =============================================================================
-# (ไม่มี databases section — ใช้ external Supabase แทน)
