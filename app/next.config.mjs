@@ -36,7 +36,8 @@ const withPWA = withPWAInit({
       },
     ],
   },
-  disable: process.env.NODE_ENV === 'development',
+  // Disable on Render free plan (OOM from double webpack pass) and local dev
+  disable: process.env.NODE_ENV === 'development' || process.env.RENDER === 'true',
 })
 
 /** @type {import('next').NextConfig} */
