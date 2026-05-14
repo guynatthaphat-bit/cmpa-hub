@@ -17,16 +17,20 @@
 
 services:
   # ---------------------------------------------------------------------------
-  # Web Service - Next.js 14.2 PWA (Docker)
+  # Web Service - Next.js 14.2 PWA (Node.js native — Free plan)
+  # ⚠️ Free plan: spins down after 15 min inactivity, cold start ~30s
+  # อัปเกรดเป็น starter ($7/mo) เพื่อ always-on + Docker runtime
   # ---------------------------------------------------------------------------
   - type: web
     name: cmpa-hub
-    runtime: docker
+    runtime: node
     region: singapore                  # ใกล้ไทย latency ~30-50ms
-    plan: starter                      # $7/mo - 512MB RAM, 0.5 CPU
+    plan: free                         # $0 — ไม่รองรับ Docker, spin-down 15 min
     branch: main
-    dockerfilePath: ./app/Dockerfile   # ใช้ Dockerfile เดิม
-    dockerContext: ./app               # build context = app/
+    rootDir: app                       # Next.js อยู่ใน app/
+    buildCommand: npm install && npx prisma generate && npm run build
+    preDeployCommand: npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts
+    startCommand: npm run start
     healthCheckPath: /api/health       # endpoint มีอยู่แล้ว
     autoDeploy: true
 
@@ -130,7 +134,7 @@ services:
 # =============================================================================
 databases:
   - name: cmpa-hub-db
-    plan: basic-256mb                  # $6/mo - 256MB RAM, 1GB storage
+    plan: basic-256mb                  # $6/mo — ต่ำสุดที่มี (Render ไม่มี free DB)
                                        # อัปเกรดเป็น basic-1gb ($19/mo) ถ้าใช้งานหนัก
     databaseName: cmpa_hub
     user: cmpa_admin
