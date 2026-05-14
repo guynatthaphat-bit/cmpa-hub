@@ -1,5 +1,9 @@
 import createNextIntlPlugin from 'next-intl/plugin'
 import withPWAInit from '@ducanh2912/next-pwa'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts')
 
@@ -41,6 +45,13 @@ const nextConfig = {
   poweredByHeader: false,
   experimental: {
     serverActions: { bodySizeLimit: '25mb' },
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.join(__dirname, 'src'),
+    }
+    return config
   },
   images: {
     formats: ['image/avif', 'image/webp'],
