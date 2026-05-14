@@ -28,8 +28,7 @@ services:
     plan: free                         # $0 — ไม่รองรับ Docker, spin-down 15 min
     branch: main
     rootDir: app                       # Next.js อยู่ใน app/
-    buildCommand: npm install && npx prisma generate && npm run build
-    preDeployCommand: npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts
+    buildCommand: npm install && npx prisma generate && npx prisma db push --skip-generate --accept-data-loss && npx tsx prisma/seed.ts && npm run build
     startCommand: npm run start
     healthCheckPath: /api/health       # endpoint มีอยู่แล้ว
     autoDeploy: true
