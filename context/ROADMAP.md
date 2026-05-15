@@ -19,9 +19,11 @@
 
 ## Phase 2 — เข้างาน + AI Research
 
-- [ ] Clock-in/out API (GPS + selfie upload)
-- [ ] เชื่อม Paperclip AI (PAPERCLIP_ENABLED=true)
-- [ ] AI chat page (ใช้ Anthropic SDK)
+- [x] 2026-05-15 — Clock-in/out + GPS + selfie (base64 ใน DB)
+- [x] 2026-05-15 — AI streaming chat (Anthropic SDK + Paperclip toggle)
+- [x] 2026-05-15 — Conversation history + delete
+- [x] 2026-05-15 — Build 23/23 routes ✅
+- [ ] Push to GitHub + Render deploy
 - [ ] ทดสอบกับ user จริง
 
 ## Phase 3 — ลางาน + เอกสาร

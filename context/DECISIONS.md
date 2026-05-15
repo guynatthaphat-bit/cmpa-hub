@@ -26,6 +26,17 @@
 
 ---
 
+## [2026-05-15] — Phase 2: Selfie Storage
+
+| หัวข้อ | การตัดสินใจ | เหตุผล |
+|--------|------------|--------|
+| Selfie upload | base64 JPEG ใน DB field | ไม่ต้องการ external storage, องค์กรเล็ก 45 คน |
+| Image compression | Canvas API → JPEG 72%, max 640px | ลด size จาก ~3MB → ~80KB ก่อนส่ง |
+| GPS | เก็บพิกัดอย่างเดียว ไม่ validate รัศมี | รองรับ remote work |
+| AI backend | Anthropic claude-sonnet-4-6 + Paperclip toggle | PAPERCLIP_ENABLED env var, fallback อัตโนมัติ |
+| AI streaming | SSE (text/event-stream) | ไม่ต้องการ Vercel AI SDK, ลด dependency |
+| Conversation | บันทึก AIConversation + AIMessage ใน Supabase | ประวัติข้าม session |
+
 ## Template สำหรับบันทึกการตัดสินใจใหม่
 
 ```

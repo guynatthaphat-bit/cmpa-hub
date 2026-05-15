@@ -1,19 +1,38 @@
-import { getTranslations } from 'next-intl/server'
-import { Sparkles } from 'lucide-react'
-import { ComingSoon } from '@/components/shared/coming-soon'
+import { getConversations, getConversationMessages } from '@/server/actions/ai'
+import { AiShell } from '@/components/modules/ai/ai-shell'
 
-export const metadata = { title: 'ผู้ช่วย AI' }
+export const metadata = { title: 'AI วิจัย' }
 
-export default async function AiPage() {
-  const t = await getTranslations('Ai')
-  const features = t.raw('features') as string[]
+interface Props {
+  searchParams: { c?: string }
+}
+
+export default async function AiPage({ searchParams }: Props) {
+  const [conversations, activeConversation] = await Promise.all([
+    getConversations(),
+    searchParams.c ? getConversationMessages(searchParams.c) : null,
+  ])
+
+  const active = activeConversation
+    ? {
+        id: activeConversation.id,
+        messages: activeConversation.messages.map((m) => ({
+          id: m.id,
+          role: m.role,
+          content: m.content,
+          createdAt: m.createdAt,
+        })),
+      }
+    : null
+
   return (
-    <ComingSoon
-      icon={Sparkles}
-      title={t('title')}
-      description={t('description')}
-      phase={2}
-      features={features}
+    <AiShell
+      conversations={conversations.map((c) => ({
+        id: c.id,
+        title: c.title,
+        updatedAt: c.updatedAt,
+      }))}
+      activeConversation={active}
     />
   )
 }

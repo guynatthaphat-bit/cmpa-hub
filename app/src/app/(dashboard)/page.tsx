@@ -76,7 +76,6 @@ export default async function HomePage() {
             icon={Clock}
             label={tNav('attendance')}
             phase={2}
-            disabled
           />
           <QuickActionCard
             href="/leave"
@@ -97,7 +96,6 @@ export default async function HomePage() {
             icon={Sparkles}
             label={tNav('ai')}
             phase={2}
-            disabled
           />
         </div>
       </section>

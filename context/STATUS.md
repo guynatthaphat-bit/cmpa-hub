@@ -27,8 +27,11 @@
 | Auth.js v5 | ✅ มีโค้ดแล้ว | JWT strategy + rate limiting |
 | Docker | ✅ มี Dockerfile + docker-entrypoint.sh | |
 | render.yaml | ✅ พร้อม | starter $7/mo + basic-256mb DB $6/mo |
-| GitHub remote | ❌ ยังไม่ push | รอขออนุญาต |
-| Render deploy | ❌ ยังไม่ deploy | รอ push ก่อน |
+| GitHub | ✅ push แล้ว | https://github.com/guynatthaphat-bit/cmpa-hub |
+| Supabase DB | ✅ เชื่อมต่อแล้ว | Project: sduavqmqqnbbjvjtwbtj, Singapore |
+| Prisma schema | ✅ sync กับ Supabase | db push สำเร็จ |
+| Admin user | ✅ seed แล้ว | natthaphat@cmpa.or.th |
+| Render deploy | ✅ Deploy แล้ว | https://cmpa-hub.onrender.com |
 | npm install | ✅ เสร็จแล้ว | Next.js อัปเกรด 14.2.18→14.2.35 (security fix) |
 | .env | ✅ สร้างแล้ว | ใส่ API key เรียบร้อย |
 | TypeScript | ✅ 0 errors | แก้ 3 กลุ่ม bug (JWT type, AuditLog fields, User fields) |
@@ -38,8 +41,8 @@
 
 | Phase | สถานะ | รายละเอียด |
 |-------|--------|-----------|
-| Phase 1 — Foundation | 🔄 กำลังเริ่ม | source code พร้อม รอ install + deploy |
-| Phase 2 — เข้างาน + AI | ⏳ รอ | skeleton page มีแล้ว |
+| Phase 1 — Foundation | ✅ เสร็จ | Deploy สำเร็จที่ https://cmpa-hub.onrender.com |
+| Phase 2 — เข้างาน + AI | ✅ เสร็จ | Build 23/23 routes — รอ push + deploy |
 | Phase 3 — ลางาน + เอกสาร | ⏳ รอ | skeleton page มีแล้ว |
 | Phase 4 — โครงการ + KPI | ⏳ รอ | skeleton page มีแล้ว |
 | Phase 5 — ค่าใช้จ่าย OCR | ⏳ รอ | skeleton page มีแล้ว |
@@ -74,6 +77,26 @@ cmpa-hub/
 5. `LINE_CHANNEL_SECRET` — Phase 3 (ปิดไว้ก่อน)
 6. `R2_*` — ถ้าเปิด Cloudflare R2 backup
 
+## 🏗️ Phase 2 Code (2026-05-15)
+
+| ไฟล์ | สถานะ |
+|------|--------|
+| `src/server/actions/attendance.ts` | ✅ clockIn/clockOut/getToday/getHistory |
+| `src/server/actions/ai.ts` | ✅ createConversation/getConversations/delete/getMessages |
+| `src/lib/ai-client.ts` | ✅ Anthropic streaming + Paperclip fallback |
+| `src/app/api/ai/chat/route.ts` | ✅ SSE streaming POST |
+| `src/components/modules/attendance/*` | ✅ ClockButton + TodayStatus + History + ClockArea |
+| `src/components/modules/ai/*` | ✅ ChatInterface + ConversationList + AiShell |
+| `src/app/(dashboard)/attendance/page.tsx` | ✅ ใช้งานได้จริง (ไม่ใช่ ComingSoon) |
+| `src/app/(dashboard)/ai/page.tsx` | ✅ ใช้งานได้จริง |
+| `src/app/(dashboard)/page.tsx` | ✅ enable Phase 2 cards |
+
+**ข้อมูลทางเทคนิค:**
+- Selfie: compress ด้วย Canvas API → JPEG 72% → base64 เก็บใน DB (ไม่ต้องการ external storage)
+- GPS: navigator.geolocation → เก็บ lat/lng ไม่ validate รัศมี
+- AI: SSE streaming, PAPERCLIP_ENABLED toggle, fallback Claude
+- Build: 23/23 routes ✅, TypeScript 0 errors ✅
+
 ## 🔑 Last Action
 
-Session 1 (2026-05-15): build ผ่านสมบูรณ์ 0 errors — รอ: push GitHub + deploy Render
+Session 2 (2026-05-15): Phase 2 code เสร็จ — รอ: git push + Render deploy
