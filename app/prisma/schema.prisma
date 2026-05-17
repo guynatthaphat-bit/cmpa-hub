@@ -90,6 +90,9 @@ model User {
   auditLogs        AuditLog[]
   sessions         Session[]
   accounts         Account[]
+  targetsCreated   Target[]       @relation("TargetCreator")
+  outreachLogs     OutreachLog[]  @relation("OutreachCreator")
+  crawlJobs        CrawlJob[]     @relation("CrawlJobCreator")
 
   @@index([status])
   @@index([role])
@@ -552,4 +555,108 @@ model RateLimit {
 
   @@unique([key])
   @@index([resetAt])
+}
+
+// ============================================================================
+// TARGET DATABASE (Phase 6)
+// ============================================================================
+
+enum TargetStatus {
+  NEW
+  CONTACTED
+  PENDING
+  DONE
+  REJECTED
+}
+
+enum CrawlJobStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
+}
+
+model TargetCategory {
+  id             String   @id @default(cuid())
+  nameTh         String
+  icon           String?
+  color          String?
+  searchKeywords String[]
+  sources        Json?
+  createdAt      DateTime @default(now())
+
+  targets   Target[]
+  crawlJobs CrawlJob[]
+}
+
+model Target {
+  id            String          @id @default(cuid())
+  categoryId    String?
+  category      TargetCategory? @relation(fields: [categoryId], references: [id])
+
+  name          String
+  province      String?
+  district      String?
+  address       String?
+  phone         String?
+  email         String?
+  website       String?
+  contactPerson String?
+  contactTitle  String?
+  priority      Int             @default(2) // 1=สูง 2=กลาง 3=ต่ำ
+  status        TargetStatus    @default(NEW)
+  source        String?
+  notes         String?         @db.Text
+  rawData       Json?
+
+  createdById String?
+  createdBy   User?   @relation("TargetCreator", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  outreachLogs OutreachLog[]
+
+  @@index([status])
+  @@index([province])
+  @@index([categoryId])
+  @@index([createdById])
+}
+
+model OutreachLog {
+  id       String @id @default(cuid())
+  targetId String
+  target   Target @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  type     String // "letter" | "email" | "call" | "visit"
+  sentAt   DateTime @default(now())
+  response String?  @db.Text
+
+  createdById String?
+  createdBy   User?   @relation("OutreachCreator", fields: [createdById], references: [id])
+
+  @@index([targetId])
+}
+
+model CrawlJob {
+  id         String          @id @default(cuid())
+  categoryId String?
+  category   TargetCategory? @relation(fields: [categoryId], references: [id])
+
+  provinces   String[]
+  sources     String[]
+  status      CrawlJobStatus @default(PENDING)
+  progress    Int            @default(0)
+  total       Int            @default(0)
+  resultCount Int            @default(0)
+  error       String?
+
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdById String?
+  createdBy   User?    @relation("CrawlJobCreator", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([status])
+  @@index([createdById])
 }

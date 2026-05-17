@@ -15,6 +15,7 @@ import {
   Sparkles,
   Bell,
   Settings,
+  Target,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
@@ -32,6 +33,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'leave', href: '/leave', icon: CalendarDays, primary: true },
   { key: 'projects', href: '/projects', icon: KanbanSquare, primary: true },
   // primary 5th slot is "More"
+  { key: 'targets', href: '/targets', icon: Target },
   { key: 'kpi', href: '/kpi', icon: LineChart },
   { key: 'documents', href: '/documents', icon: FolderClosed },
   { key: 'expenses', href: '/expenses', icon: Receipt },
