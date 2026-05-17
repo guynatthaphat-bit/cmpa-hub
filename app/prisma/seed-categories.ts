@@ -48,21 +48,13 @@ const DEFAULT_CATEGORIES = [
 ]
 
 async function main() {
-  for (const cat of DEFAULT_CATEGORIES) {
-    await prisma.targetCategory.upsert({
-      where: { id: cat.nameTh } as never,
-      create: cat,
-      update: cat,
-    })
-  }
-  // Use createMany with skipDuplicates instead
   const existing = await prisma.targetCategory.count()
-  if (existing === 0) {
-    await prisma.targetCategory.createMany({ data: DEFAULT_CATEGORIES })
-    console.log('✅ seeded 6 default categories')
-  } else {
+  if (existing > 0) {
     console.log(`ℹ️  ${existing} categories already exist — skipping`)
+    return
   }
+  await prisma.targetCategory.createMany({ data: DEFAULT_CATEGORIES })
+  console.log('✅ seeded 6 default categories')
 }
 
 main()
