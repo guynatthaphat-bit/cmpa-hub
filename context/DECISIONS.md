@@ -37,6 +37,18 @@
 | AI streaming | SSE (text/event-stream) | ไม่ต้องการ Vercel AI SDK, ลด dependency |
 | Conversation | บันทึก AIConversation + AIMessage ใน Supabase | ประวัติข้าม session |
 
+## [2026-05-17] — Phase 2.5: Targets Module Architecture
+
+| หัวข้อ | การตัดสินใจ | เหตุผล |
+|--------|------------|--------|
+| ค้นหาอัตโนมัติ | Google Places API + mock fallback | ใช้งานได้ทันทีโดยไม่ต้องมี API key, toggle ด้วย env var |
+| Export | xlsx (SheetJS) ใน API route | ไม่ต้องการ library เพิ่ม, รองรับ filter เดิม |
+| Bulk action | floating action bar | UX ที่เป็น mobile-first |
+| Outreach log | append-only timeline per target | ประวัติการติดต่อไม่ควร edit ย้อนหลัง |
+| CrawlJob | fire-and-forget async + progress polling | ไม่ต้องการ WebSocket |
+
+---
+
 ## Template สำหรับบันทึกการตัดสินใจใหม่
 
 ```

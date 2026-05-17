@@ -1,6 +1,6 @@
 # STATUS.md — สถานะปัจจุบัน CMPA Hub
 
-**อัปเดตล่าสุด:** 2026-05-15
+**อัปเดตล่าสุด:** 2026-05-17
 
 ---
 
@@ -43,6 +43,7 @@
 |-------|--------|-----------|
 | Phase 1 — Foundation | ✅ เสร็จ | Deploy สำเร็จที่ https://cmpa-hub.onrender.com |
 | Phase 2 — เข้างาน + AI | ✅ เสร็จ | Build 23/23 routes — รอ push + deploy |
+| Phase 2.5 — Targets module | ✅ เสร็จ | Build 32/32 routes, commit + push สำเร็จ |
 | Phase 3 — ลางาน + เอกสาร | ⏳ รอ | skeleton page มีแล้ว |
 | Phase 4 — โครงการ + KPI | ⏳ รอ | skeleton page มีแล้ว |
 | Phase 5 — ค่าใช้จ่าย OCR | ⏳ รอ | skeleton page มีแล้ว |
@@ -77,6 +78,22 @@ cmpa-hub/
 5. `LINE_CHANNEL_SECRET` — Phase 3 (ปิดไว้ก่อน)
 6. `R2_*` — ถ้าเปิด Cloudflare R2 backup
 
+## 🎯 Phase 2.5 Code (2026-05-17)
+
+| ไฟล์ | สถานะ |
+|------|--------|
+| `prisma/schema.prisma` | ✅ +4 models: Target, TargetCategory, OutreachLog, CrawlJob |
+| `app/src/server/actions/targets.ts` | ✅ CRUD + bulkUpdate + outreachLog + stats |
+| `app/api/targets/` | ✅ GET list/xlsx export, POST, GET/PATCH/DELETE [id] |
+| `app/api/target-categories/` | ✅ GET + POST (ADMIN/MANAGER only) |
+| `app/api/crawl-jobs/` | ✅ GET list + POST + async job runner |
+| `app/api/targets/search/` | ✅ Google Places + mock fallback |
+| `app/(dashboard)/targets/` | ✅ list, detail, new, edit pages |
+| `components/modules/targets/*` | ✅ target-card, filter-sheet, target-form, outreach-timeline, bulk-action-bar, auto-search-panel |
+| `components/ui/` | ✅ dialog, select, separator, sheet, textarea |
+| `bottom-nav.tsx` | ✅ เพิ่ม Targets ใน overflow menu |
+| `context/CMPA_MASTER.md` | ✅ org context document |
+
 ## 🏗️ Phase 2 Code (2026-05-15)
 
 | ไฟล์ | สถานะ |
@@ -99,4 +116,4 @@ cmpa-hub/
 
 ## 🔑 Last Action
 
-Session 2 (2026-05-15): Phase 2 code เสร็จ — รอ: git push + Render deploy
+Session 3 (2026-05-17): Targets module commit + push — build 32/32 routes ✅

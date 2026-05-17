@@ -26,6 +26,18 @@
 - [ ] Push to GitHub + Render deploy
 - [ ] ทดสอบกับ user จริง
 
+## Phase 2.5 — Targets Database (2026-05-17) ✅
+
+- [x] Target, TargetCategory, OutreachLog, CrawlJob models
+- [x] CRUD + bulk status update
+- [x] Excel export
+- [x] Google Places auto-search (mock fallback)
+- [x] Outreach timeline per target
+- [x] Push to GitHub
+- [ ] prisma db push ไปยัง Supabase production
+- [ ] seed หมวดหมู่เริ่มต้น (seed-categories.ts)
+- [ ] ทดสอบกับ user จริง
+
 ## Phase 3 — ลางาน + เอกสาร
 
 - [ ] ระบบลางาน — ยื่น/อนุมัติ/ปฏิเสธ
